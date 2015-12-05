@@ -1,0 +1,17 @@
+<%=provide(:title, "flash") %>
+<div class="container">
+  <div class="jumbotron">
+    <h1>Welcome to flash!</h1>
+    <p class="center">flash is a flashcards rails app</p>
+  </div>
+
+<div class="center">
+  <% if !current_user.nil? %>
+    <%= link_to 'hello', decks_path(current_user) %>
+  <% else %>
+    <%= link_to 'signup', new_user_registration_path, class: 'btn btn-default btn-lg' %>
+    <% end %>
+  </div>
+</div>
+  </div>
+</div>
