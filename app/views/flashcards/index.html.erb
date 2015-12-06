@@ -20,7 +20,7 @@
         <td><%= flashcard.back %></td>
         <td><%= flashcard.recent %></td>
         <td><%= flashcard.deck %></td>
-        <td><%= link_to 'Show', deck_flashcard %></td>
+        <td><%= link_to 'Show', deck_flashcard_path(flashcard) %></td>
         <td><%= link_to 'Edit', edit_deck_flashcard_path(flashcard) %></td>
         <td><%= link_to 'Destroy', deck_flashcard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

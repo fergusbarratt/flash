@@ -1,10 +1,9 @@
 class FlashcardsController < ApplicationController
-  before_action :set_flashcard, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_flashcard, only: [:show, :new, :update, :destroy]
   # GET /flashcards
   # GET /flashcards.json
   def index
-    @flashcards = Flashcard.all
+    @flashcards = current_user.flashcards.all
   end
 
   # GET /flashcards/1
@@ -14,7 +13,7 @@ class FlashcardsController < ApplicationController
 
   # GET /flashcards/new
   def new
-    @flashcard = Flashcard.new
+    @flashcard = @deck.flashcards.new
   end
 
   # GET /flashcards/1/edit
@@ -24,11 +23,9 @@ class FlashcardsController < ApplicationController
   # POST /flashcards
   # POST /flashcards.json
   def create
-    @flashcard = Flashcard.new(flashcard_params)
-
     respond_to do |format|
       if @flashcard.save
-        format.html { redirect_to @flashcard, notice: 'Flashcard was successfully created.' }
+        format.html { redirect_to deck_flashcards_path, notice: 'Flashcard was successfully created.' }
         format.json { render :show, status: :created, location: @flashcard }
       else
         format.html { render :new }
@@ -42,7 +39,7 @@ class FlashcardsController < ApplicationController
   def update
     respond_to do |format|
       if @flashcard.update(flashcard_params)
-        format.html { redirect_to @flashcard, notice: 'Flashcard was successfully updated.' }
+        format.html { redirect_to deck_flashcards_path(@deck), notice: 'Flashcard was successfully updated.' }
         format.json { render :show, status: :ok, location: @flashcard }
       else
         format.html { render :edit }
@@ -64,11 +61,14 @@ class FlashcardsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_flashcard
-      @flashcard = Flashcard.find(params[:id])
+      @deck = current_user.decks.find(params[:deck_id])
+      if @deck.flashcards.find_by(params[:id])
+        @flashcard = @deck.flashcards.find_by(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flashcard_params
-      params.require(:flashcard).permit(:front, :back, :recent, :deck_id)
+      params.require(:flashcard).permit(:id, :front, :back, :recent, :deck_id)
     end
 end
